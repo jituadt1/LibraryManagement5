@@ -1,0 +1,96 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<LibraryManagement5.Context.Book>
+@{
+    ViewBag.Title = "My Books";
+}
+
+<h2>My Books</h2>
+<br />
+<h4>Books Created</h4>
+<table class="table table-hover">
+    <tr>
+        @using (Html.BeginForm("MyBooks", "Student", FormMethod.Get))
+        {
+            <td>
+                <b>Search By: </b>
+                &nbsp;
+                @Html.RadioButton("searchBy", "Book Name", true) Book Name
+                &nbsp;
+                @Html.RadioButton("searchBy", "Author") Author
+            </td>
+            <td></td>
+            <td></td>
+            <td style="margin-left:15em">
+                @Html.TextBox("search") <button type="submit" class="btn btn-primary" value="Search">Search</button>
+            </td>
+        }
+    </tr>
+    <tr>
+        <th>@Html.ActionLink("Book Name", "MyBooks", new { sortBy = ViewBag.SortByBookName, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] })</th>
+        <th>@Html.ActionLink("Author", "MyBooks", new { sortBy = ViewBag.SortByAuthor, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] })</th>
+        <th>@Html.ActionLink("Quantity", "MyBooks", new { sortBy = ViewBag.SortByQuantity, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] })</th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.BookName</td>
+            <td>@item.Author</td>
+            <td>@item.Quantity</td>
+            <td>
+                <a href="@Url.Action("Edit", new { @item.id, item.BookName, item.Author, item.Quantity})" class="btn btn-success">Edit</a>
+                <a href="@Url.Action("Delete", new { item.id })" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
+@Html.PagedListPager(Model, page => Url.Action("MyBooks", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] }),
+    new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true,})
+
+<br />
+<h4>Books Borrowed</h4>
+<table class="table table-hover">
+    <tr>
+        @using (Html.BeginForm("MyBooks", "Student", FormMethod.Get))
+        {
+            <td>
+                <b>Search By: </b>
+                &nbsp;
+                @Html.RadioButton("searchBy", "Book Name", true) Book Name
+                &nbsp;
+                @Html.RadioButton("searchBy", "Author") Author
+            </td>
+            <td></td>
+            <td></td>
+            <td style="margin-left:15em">
+                @Html.TextBox("search") <button type="submit" class="btn btn-primary" value="Search">Search</button>
+            </td>
+        }
+    </tr>
+    <tr>
+        <th>@Html.ActionLink("Book Name", "MyBooks", new { sortBy = ViewBag.SortByBookName, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] })</th>
+        <th>@Html.ActionLink("Author", "MyBooks", new { sortBy = ViewBag.SortByAuthor, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] })</th>
+        <th>@Html.ActionLink("Quantity", "MyBooks", new { sortBy = ViewBag.SortByQuantity, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] })</th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in ViewBag.BorrowedBooks)
+    {
+        <tr>
+            <td>@item.BookName</td>
+            <td>@item.Author</td>
+            <td>@item.Quantity</td>
+            <td>
+                <a href="@Url.Action("Return", new { @item.id, item.BookName, item.Author, item.Quantity})" class="btn btn-warning">Return</a>
+            </td>
+        </tr>
+    }
+</table>
+@Html.PagedListPager(Model, page => Url.Action("MyBooks", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"] }),
+    new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true })
+

@@ -1,0 +1,43 @@
+﻿@model LibraryManagement5.Context.User
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="form-group">
+    <div class="control-label col-md-2">
+        Email:
+    </div>
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-md-10">
+        <label style="margin-left:14em" class="text-danger">@ViewData["message"]</label>
+    </div>
+</div>
+    <table>
+        <tr>
+            <td>
+                <button class="btn btn-primary" style="margin-left:15em">Login</button>
+            </td>
+            <td>
+                <button class="btn btn-warning" style="margin-left:2em" formaction="Register">Register</button>
+            </td>
+        </tr>
+    </table>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
